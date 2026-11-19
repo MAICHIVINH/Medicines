@@ -68,12 +68,12 @@ export default async function HomePage() {
             <div className="lg:col-span-7 space-y-6">
               <div className="inline-flex items-center gap-2 rounded-full bg-pharma-700/60 border border-pharma-500/40 px-3.5 py-1.5 text-xs font-medium text-pharma-100">
                 <SafetyCertificateOutlined className="text-pharma-300" />
-                <span>Cơ sở dữ liệu Dược điển chuẩn hóa • Thông tin kiểm duyệt từ nguồn chính thống</span>
+                <span>Cơ sở dữ liệu Dược điển chuẩn hóa</span>
               </div>
 
               <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl leading-tight">
                 Hệ thống Tra cứu &amp; Quản lý{' '}
-                <span className="text-pharma-300">Danh mục Thuốc</span> Chính thống
+                <span className="text-pharma-300">Danh mục Thuốc</span>
               </h1>
 
               <p className="text-base sm:text-lg text-pharma-100/90 max-w-2xl leading-relaxed">
