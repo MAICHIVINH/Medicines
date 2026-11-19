@@ -43,7 +43,7 @@ export function PublicHeader({ categories = [] }: { categories?: NavCategoryItem
           <div className="flex items-center gap-2">
             <SafetyCertificateOutlined className="text-pharma-300" />
             <span>
-              Cổng thông tin tra cứu dữ liệu dược phẩm &amp; danh mục thuốc chính thống – Không bán hàng, không kê đơn trực tuyến
+              Cổng thông tin tra cứu dữ liệu dược phẩm và danh mục thuốc – Không bán hàng, không kê đơn trực tuyến
             </span>
           </div>
           <div className="hidden sm:flex items-center gap-4 text-pharma-100">
@@ -71,7 +71,7 @@ export function PublicHeader({ categories = [] }: { categories?: NavCategoryItem
                 Dược sĩ <span className="text-pharma-600">Khánh</span>
               </span>
               <span className="block text-xs text-slate-500">
-                Hệ thống Tra cứu Dược
+                Hệ thống tra cứu Dược
               </span>
             </div>
           </Link>
@@ -103,31 +103,28 @@ export function PublicHeader({ categories = [] }: { categories?: NavCategoryItem
           <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
             <Link
               href="/"
-              className={`transition-colors ${
-                pathname === '/'
+              className={`transition-colors ${pathname === '/'
                   ? 'text-pharma-700 font-semibold'
                   : 'text-slate-600 hover:text-pharma-600'
-              }`}
+                }`}
             >
               Trang chủ
             </Link>
             <Link
               href="/medicines"
-              className={`transition-colors ${
-                pathname.startsWith('/medicines')
+              className={`transition-colors ${pathname.startsWith('/medicines')
                   ? 'text-pharma-700 font-semibold'
                   : 'text-slate-600 hover:text-pharma-600'
-              }`}
+                }`}
             >
               Danh sách thuốc
             </Link>
             <Link
               href="/categories"
-              className={`flex items-center gap-1.5 transition-colors ${
-                pathname.startsWith('/categories')
+              className={`flex items-center gap-1.5 transition-colors ${pathname.startsWith('/categories')
                   ? 'text-pharma-700 font-semibold'
                   : 'text-slate-600 hover:text-pharma-600'
-              }`}
+                }`}
             >
               <AppstoreOutlined />
               Danh mục
@@ -202,21 +199,21 @@ export function PublicHeader({ categories = [] }: { categories?: NavCategoryItem
               onClick={() => setMobileMenuOpen(false)}
               className="rounded-lg px-3 py-2 hover:bg-slate-100"
             >
-              Tra cứu Danh sách Thuốc
+              Tra cứu danh sách thuốc
             </Link>
             <Link
               href="/categories"
               onClick={() => setMobileMenuOpen(false)}
               className="rounded-lg px-3 py-2 hover:bg-slate-100"
             >
-              Danh mục Dược phẩm
+              Danh mục dược phẩm
             </Link>
             <Link
               href="/admin"
               onClick={() => setMobileMenuOpen(false)}
               className="rounded-lg px-3 py-2 text-pharma-700 bg-pharma-50"
             >
-              Khu vực Quản trị (Admin)
+              Khu vực quản trị (Admin)
             </Link>
           </div>
         </div>

@@ -115,7 +115,7 @@ export function MedicineCard({ medicine }: { medicine: MedicineCardItem }) {
         {/* Footer Price & Variant Count */}
         <div className="mt-auto pt-4 border-t border-slate-100 flex items-end justify-between gap-2">
           <div>
-            <span className="block text-[11px] text-slate-400">Giá tham khảo từ</span>
+            <span className="block text-[11px] text-slate-400">Giá tham khảo</span>
             <span className="text-base font-bold text-pharma-700">
               {medicine.referencePrice !== null && medicine.referencePrice !== undefined
                 ? formatVND(medicine.referencePrice)

@@ -89,16 +89,13 @@ export function PublicFooter() {
                   Sơ đồ trang (Sitemap.xml)
                 </Link>
               </li>
-              <li className="text-xs text-slate-500 pt-2">
-                Hạ tầng dữ liệu: Neon PostgreSQL &amp; Neon Object Storage (S3)
-              </li>
             </ul>
           </div>
         </div>
 
         <div className="mt-10 border-t border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <p>© {new Date().getFullYear()} Dược sĩ Khánh . Hệ thống Tra cứu &amp; Quản lý Danh mục Thuốc.</p>
-          <p>Phiên bản Production 1.0 • Thiết kế theo chuẩn thông tin Dược phẩm</p>
+          <p>© {new Date().getFullYear()} Dược sĩ Khánh . Hệ thống tra cứu và quản lý danh mục thuốc</p>
+          <p>Phiên bản Production 1.0</p>
         </div>
       </div>
     </footer>

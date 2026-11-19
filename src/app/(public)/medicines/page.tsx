@@ -139,7 +139,7 @@ export default async function MedicinesCatalogPage({ searchParams }: PageProps) 
           Trang chủ
         </Link>
         <RightOutlined className="text-[10px]" />
-        <span className="font-medium text-slate-800">Danh sách &amp; Tra cứu Thuốc</span>
+        <span className="font-medium text-slate-800">Danh sách &amp; tra cứu thuốc</span>
       </nav>
 
       {/* Page Heading */}

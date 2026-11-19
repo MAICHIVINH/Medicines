@@ -52,7 +52,7 @@ export default async function CategoriesPage() {
           Trang chủ
         </Link>
         <RightOutlined className="text-[10px]" />
-        <span className="font-medium text-slate-800">Danh mục Dược phẩm</span>
+        <span className="font-medium text-slate-800">Danh mục dược phẩm</span>
       </nav>
 
       {/* Header */}
@@ -99,9 +99,6 @@ export default async function CategoriesPage() {
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-pharma-50 text-pharma-600 shrink-0">
-                        <AppstoreOutlined className="text-xl" />
-                      </div>
                       <div>
                         <Link
                           href={`/categories/${root.slug}`}
