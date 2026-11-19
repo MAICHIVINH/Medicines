@@ -43,7 +43,7 @@ export function PublicHeader({ categories = [] }: { categories?: NavCategoryItem
           <div className="flex items-center gap-2">
             <SafetyCertificateOutlined className="text-pharma-300" />
             <span>
-              Cổng thông tin tra cứu dữ liệu dược phẩm và danh mục thuốc – Không bán hàng, không kê đơn trực tuyến
+              Cổng thông tin tra cứu dữ liệu dược phẩm và danh mục thuốc
             </span>
           </div>
           <div className="hidden sm:flex items-center gap-4 text-pharma-100">
