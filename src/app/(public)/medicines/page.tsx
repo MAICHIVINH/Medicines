@@ -143,14 +143,14 @@ export default async function MedicinesCatalogPage({ searchParams }: PageProps) 
       </nav>
 
       {/* Page Heading */}
-      <div className="space-y-1">
+      {/* <div className="space-y-1">
         <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
           Danh mục Thuốc &amp; Dược phẩm
         </h1>
         <p className="text-sm text-slate-600">
           Tra cứu theo tên thuốc, hoạt chất, nhà sản xuất, mã SKU biến thể và các thuộc tính bào chế động.
         </p>
-      </div>
+      </div> */}
 
       {(!dbReady || dbError) && <DatabaseStatusNotice message={dbError} />}
 

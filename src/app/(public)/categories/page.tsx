@@ -56,7 +56,7 @@ export default async function CategoriesPage() {
       </nav>
 
       {/* Header */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
+      {/* <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <span className="text-xs font-bold uppercase tracking-wider text-pharma-600">
@@ -76,7 +76,7 @@ export default async function CategoriesPage() {
             Xem tất cả thuốc
           </Link>
         </div>
-      </div>
+      </div> */}
 
       {(!dbReady || dbError) && <DatabaseStatusNotice message={dbError} />}
 
