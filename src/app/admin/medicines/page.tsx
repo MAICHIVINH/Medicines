@@ -467,7 +467,6 @@ export default function AdminMedicinesListPage() {
                         icon={<EditOutlined />}
                         onClick={() => router.push(`/admin/medicines/${record.id}`)}
                       >
-                        Chi tiết
                       </Button>
 
                       {record.status !== 'PUBLISHED' ? (
@@ -477,7 +476,7 @@ export default function AdminMedicinesListPage() {
                           icon={<CheckCircleOutlined />}
                           onClick={() => handlePublish(record)}
                         >
-                          Xuất bản
+                          Hiện
                         </Button>
                       ) : (
                         <Button

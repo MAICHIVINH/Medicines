@@ -1,5 +1,6 @@
 'use client';
 
+import '@/lib/antd-react19-patch';
 import React from 'react';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { ConfigProvider, App as AntdApp } from 'antd';

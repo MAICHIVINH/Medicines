@@ -813,6 +813,100 @@ export class MedicineService {
     return deleted;
   }
 
+  public async getTrashMedicines() {
+    ensureDatabaseConfigured();
+    const items = await prisma.medicine.findMany({
+      where: { deletedAt: { not: null } },
+      include: {
+        category: {
+          select: { id: true, name: true, slug: true },
+        },
+        variants: {
+          select: { id: true, sku: true, name: true, price: true },
+        },
+        images: {
+          select: { id: true, objectKey: true, bucketName: true, fileName: true, isPrimary: true },
+        },
+      },
+      orderBy: { deletedAt: 'desc' },
+    });
+
+    return items;
+  }
+
+  public async restoreMedicine(id: string, adminId: string) {
+    ensureDatabaseConfigured();
+    const existing = await prisma.medicine.findUnique({ where: { id } });
+    if (!existing) {
+      throw new NotFoundError('Thuốc không tồn tại trong hệ thống.');
+    }
+    if (!existing.deletedAt) {
+      return existing;
+    }
+
+    const restored = await prisma.medicine.update({
+      where: { id },
+      data: {
+        deletedAt: null,
+        status: MedicineStatus.DRAFT,
+        updatedBy: adminId,
+      },
+    });
+
+    return restored;
+  }
+
+  public async hardDeleteMedicine(id: string) {
+    ensureDatabaseConfigured();
+    const existing = await prisma.medicine.findUnique({
+      where: { id },
+      include: { images: true },
+    });
+    if (!existing) {
+      throw new NotFoundError('Thuốc không tồn tại.');
+    }
+
+    // 1. Dọn sạch các tệp ảnh trên Neon Object Storage / S3
+    for (const img of existing.images) {
+      try {
+        await neonStorageService.deleteObject(img.objectKey, img.bucketName);
+      } catch {
+        // Bỏ qua lỗi S3 để không làm gián đoạn xóa database
+      }
+    }
+
+    // 2. Xóa vĩnh viễn khỏi Database (Cascade tự động xóa biến thể, thuộc tính biến thể, và record ảnh)
+    await prisma.medicine.delete({
+      where: { id },
+    });
+
+    return { id, name: existing.name, deletedPermanently: true };
+  }
+
+  public async emptyMedicineTrash() {
+    ensureDatabaseConfigured();
+    const deletedItems = await prisma.medicine.findMany({
+      where: { deletedAt: { not: null } },
+      include: { images: true },
+    });
+
+    for (const item of deletedItems) {
+      for (const img of item.images) {
+        try {
+          await neonStorageService.deleteObject(img.objectKey, img.bucketName);
+        } catch {
+          // Bỏ qua lỗi S3
+        }
+      }
+    }
+
+    const result = await prisma.medicine.deleteMany({
+      where: { deletedAt: { not: null } },
+    });
+
+    return { count: result.count };
+  }
+
   /**
    * 6.2. Dashboard Thống kê toàn diện từ Database thật
    */

@@ -18,13 +18,13 @@ async function main() {
     {
       username: process.env.INITIAL_ADMIN_USERNAME || 'admin',
       email: process.env.INITIAL_ADMIN_EMAIL || 'admin@pharmacatalog.vn',
-      password: process.env.INITIAL_ADMIN_PASSWORD || 'Vinh260904@',
+      password: process.env.INITIAL_ADMIN_PASSWORD || 'mat-khau',
       fullName: process.env.INITIAL_ADMIN_FULLNAME || 'Quản trị viên Hệ thống Dược điển',
     },
     {
-      username: 'VanKhanh',
-      email: 'vankhanhzxc1162005@gmail.com',
-      password: '123456',
+      username: 'Khanh',
+      email: 'khanh1162007@gmail.com',
+      password: 'mat-khau',
       fullName: 'Dược sĩ Khánh',
     },
   ];

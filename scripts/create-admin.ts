@@ -5,10 +5,10 @@ const prisma = new PrismaClient();
 
 async function main() {
   const args = process.argv.slice(2);
-  const username = args[0] || 'vankhanhzxc1162005';
-  const email = args[1] || `${username}@gmail.com`;
-  const password = args[2] || 'Khanh123456@';
-  const fullName = args[3] || 'Quản trị viên Dược';
+  const username = args[0];
+  const email = args[1];
+  const password = args[2];
+  const fullName = args[3];
 
   console.log(`\n======================================================`);
   console.log(`⏳ Đang khởi tạo tài khoản Admin mới...`);

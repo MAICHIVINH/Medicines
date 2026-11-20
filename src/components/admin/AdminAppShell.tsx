@@ -9,6 +9,7 @@ import {
   AppstoreOutlined,
   MedicineBoxOutlined,
   ControlOutlined,
+  RestOutlined,
   UserOutlined,
   LogoutOutlined,
   GlobalOutlined,
@@ -53,6 +54,12 @@ const MENU_ITEMS = [
     icon: <ControlOutlined />,
     label: <Link href="/admin/attributes">Thuộc tính động</Link>,
     title: 'Thuộc tính động',
+  },
+  {
+    key: '/admin/trash',
+    icon: <RestOutlined />,
+    label: <Link href="/admin/trash">Thùng rác</Link>,
+    title: 'Thùng rác',
   },
   {
     key: '/admin/account',
@@ -163,7 +170,7 @@ export function AdminAppShell({ children, adminUser }: AdminAppShellProps) {
                   {
                     key: 'account',
                     icon: <UserOutlined />,
-                    label: 'Thông tin tài khoản & Đổi mật khẩu',
+                    label: 'Thông tin tài khoản',
                     onClick: () => router.push('/admin/account'),
                   },
                   { type: 'divider' },
@@ -171,7 +178,7 @@ export function AdminAppShell({ children, adminUser }: AdminAppShellProps) {
                     key: 'logout',
                     icon: <LogoutOutlined />,
                     danger: true,
-                    label: 'Đăng xuất an toàn',
+                    label: 'Đăng xuất',
                     onClick: handleLogout,
                   },
                 ],

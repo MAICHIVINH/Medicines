@@ -350,6 +350,103 @@ export class CategoryService {
 
     return deleted;
   }
+
+  public async getTrashCategories() {
+    ensureDatabaseConfigured();
+    return prisma.category.findMany({
+      where: { deletedAt: { not: null } },
+      include: {
+        parent: { select: { id: true, name: true } },
+      },
+      orderBy: { deletedAt: 'desc' },
+    });
+  }
+
+  public async restoreCategory(id: string, adminId: string) {
+    ensureDatabaseConfigured();
+    const existing = await prisma.category.findUnique({ where: { id } });
+    if (!existing) {
+      throw new NotFoundError('Danh mục không tồn tại.');
+    }
+    if (!existing.deletedAt) {
+      return existing;
+    }
+
+    return prisma.category.update({
+      where: { id },
+      data: {
+        deletedAt: null,
+        isActive: true,
+        updatedBy: adminId,
+      },
+    });
+  }
+
+  public async hardDeleteCategory(id: string) {
+    ensureDatabaseConfigured();
+    const existing = await prisma.category.findUnique({
+      where: { id },
+    });
+    if (!existing) {
+      throw new NotFoundError('Danh mục không tồn tại.');
+    }
+
+    // 1. Kiểm tra xem có thuốc nào đang hoạt động tham chiếu không
+    const activeMedCount = await prisma.medicine.count({
+      where: { categoryId: id, deletedAt: null },
+    });
+    if (activeMedCount > 0) {
+      throw new ConflictError(
+        `Không thể xóa vĩnh viễn danh mục "${existing.name}" vì có ${activeMedCount} thuốc đang sử dụng danh mục này.`
+      );
+    }
+
+    // 2. Kiểm tra xem có thuốc trong thùng rác đang tham chiếu không
+    const deletedMedCount = await prisma.medicine.count({
+      where: { categoryId: id },
+    });
+    if (deletedMedCount > 0) {
+      throw new ConflictError(
+        `Còn ${deletedMedCount} hồ sơ thuốc đang tham chiếu danh mục này trong Thùng rác. Vui lòng dọn dẹp hoặc xóa các thuốc đó trước khi xóa danh mục này.`
+      );
+    }
+
+    // 3. Kiểm tra danh mục con
+    const childrenCount = await prisma.category.count({
+      where: { parentId: id },
+    });
+    if (childrenCount > 0) {
+      throw new ConflictError(
+        `Không thể xóa danh mục "${existing.name}" vì vẫn còn danh mục con trực thuộc.`
+      );
+    }
+
+    await prisma.category.delete({
+      where: { id },
+    });
+
+    return { id, name: existing.name, deletedPermanently: true };
+  }
+
+  public async emptyCategoryTrash() {
+    ensureDatabaseConfigured();
+    const items = await prisma.category.findMany({
+      where: { deletedAt: { not: null } },
+      select: { id: true, name: true },
+    });
+
+    let deletedCount = 0;
+    for (const item of items) {
+      try {
+        await this.hardDeleteCategory(item.id);
+        deletedCount++;
+      } catch {
+        // Bỏ qua item đang bị phụ thuộc ràng buộc
+      }
+    }
+
+    return { count: deletedCount };
+  }
 }
 
 export const categoryRepository = new CategoryRepository();
