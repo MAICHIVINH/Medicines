@@ -60,3 +60,27 @@ export function extractClientIp(headers: Headers): string {
   return '127.0.0.1';
 }
 
+/**
+ * Lấy Base URL chính thức của ứng dụng (Hỗ trợ tự động nhận diện domain Vercel và Localhost)
+ */
+export function getBaseUrl(): string {
+  // 1. Ưu tiên biến môi trường NEXT_PUBLIC_APP_URL nếu được chỉ định domain thực tế
+  if (process.env.NEXT_PUBLIC_APP_URL && !process.env.NEXT_PUBLIC_APP_URL.includes('localhost')) {
+    return process.env.NEXT_PUBLIC_APP_URL.replace(/\/$/, '');
+  }
+
+  // 2. Tự động nhận diện domain Vercel (Production hoặc Preview domain)
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  }
+  if (process.env.NEXT_PUBLIC_VERCEL_URL) {
+    return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
+  }
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+
+  // 3. Mặc định cho môi trường phát triển local
+  return process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+}
+

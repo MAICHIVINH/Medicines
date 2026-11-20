@@ -13,6 +13,7 @@ import { isDatabaseConfigured } from '@/config/env';
 import { medicineService } from '@/modules/medicine/medicine.service';
 import { MedicineDetailInteractive } from '@/components/medicine/MedicineDetailInteractive';
 import { MedicineCard } from '@/components/medicine/MedicineCard';
+import { getBaseUrl } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,7 +23,7 @@ type PageProps = {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const appUrl = getBaseUrl();
 
   if (!isDatabaseConfigured()) {
     return { title: 'Chi tiết thuốc' };
@@ -77,7 +78,7 @@ export default async function MedicineDetailPage({ params }: PageProps) {
     4
   );
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const appUrl = getBaseUrl();
 
   // 5.6. SEO Structured Data phù hợp với website tra cứu y dược (Drug / MedicalWebPage)
   // Tuyệt đối không đánh dấu Offer thương mại hay cửa hàng bán hàng

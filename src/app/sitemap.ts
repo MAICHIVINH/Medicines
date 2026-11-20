@@ -1,9 +1,10 @@
 import type { MetadataRoute } from 'next';
 import { isDatabaseConfigured } from '@/config/env';
 import { prisma } from '@/infrastructure/database/prisma';
+import { getBaseUrl } from '@/lib/utils';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const baseUrl = getBaseUrl();
 
   const staticRoutes: MetadataRoute.Sitemap = [
     {
