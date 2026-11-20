@@ -73,7 +73,7 @@ model Medicine {
   description            String?         @db.Text
   usageInformation       String?         @db.Text
   storageInformation     String?         @db.Text
-  isPrescriptionRequired Boolean         @default(false)
+  isPrescriptionRequired Boolean?        @default(false)
   status                 MedicineStatus  @default(DRAFT)
   isFeatured             Boolean         @default(false)
   publishedAt            DateTime?       @db.Timestamptz(6)

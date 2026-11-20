@@ -52,7 +52,7 @@ interface MedicineDetailInteractiveProps {
   activeIngredient: string;
   manufacturer: string;
   registrationNumber: string | null;
-  isPrescriptionRequired: boolean;
+  isPrescriptionRequired?: boolean | null;
   medicineImages: MedicineImageDto[];
   variants: MedicineVariantDetailDto[];
 }
@@ -156,13 +156,17 @@ export function MedicineDetailInteractive({
 
             {/* Prescription Badge */}
             <div className="absolute top-4 left-4">
-              {isPrescriptionRequired ? (
+              {isPrescriptionRequired === true ? (
                 <span className="inline-flex items-center rounded-lg bg-rose-600 px-3 py-1 text-xs font-semibold text-white shadow">
                   Thuốc kê đơn (Rx)
                 </span>
-              ) : (
+              ) : isPrescriptionRequired === false ? (
                 <span className="inline-flex items-center rounded-lg bg-emerald-600 px-3 py-1 text-xs font-semibold text-white shadow">
                   Thuốc không kê đơn (OTC)
+                </span>
+              ) : (
+                <span className="inline-flex items-center rounded-lg bg-blue-600 px-3 py-1 text-xs font-semibold text-white shadow">
+                  Sản phẩm này không phải là thuốc
                 </span>
               )}
             </div>

@@ -94,9 +94,12 @@ export default async function MedicineDetailPage({ params }: PageProps) {
       name: medicine.name,
       activeIngredient: medicine.activeIngredient,
       nonProprietaryName: medicine.activeIngredient,
-      prescriptionStatus: medicine.isPrescriptionRequired
-        ? 'https://schema.org/PrescriptionOnly'
-        : 'https://schema.org/OTC',
+      prescriptionStatus:
+        medicine.isPrescriptionRequired === true
+          ? 'https://schema.org/PrescriptionOnly'
+          : medicine.isPrescriptionRequired === false
+            ? 'https://schema.org/OTC'
+            : 'https://schema.org/DietarySupplement',
       manufacturer: {
         '@type': 'Organization',
         name: medicine.manufacturer,
@@ -234,13 +237,30 @@ export default async function MedicineDetailPage({ params }: PageProps) {
 
         {/* Right Summary & Medical Compliance Sidebar */}
         <aside className="lg:col-span-4 space-y-6">
-          
+          {medicine.isPrescriptionRequired !== true && medicine.isPrescriptionRequired !== false && (
+            <div className="rounded-2xl border border-blue-200 bg-blue-50/80 p-4 text-xs text-blue-900 leading-relaxed flex items-start gap-3 shadow-sm">
+              <span className="font-bold text-blue-700 shrink-0">⚠️ Lưu ý:</span>
+              <span>Sản phẩm này không phải là thuốc và không có tác dụng thay thế thuốc chữa bệnh.</span>
+            </div>
+          )}
 
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
             <h3 className="text-sm font-bold text-slate-900">
               Hồ sơ Dược điển tóm tắt
             </h3>
             <dl className="space-y-3 text-xs">
+              <div className="flex justify-between gap-2 border-b border-slate-100 pb-2">
+                <dt className="text-slate-500">Phân loại:</dt>
+                <dd className="font-semibold text-right">
+                  {medicine.isPrescriptionRequired === true ? (
+                    <span className="text-rose-600">Thuốc kê đơn (Rx)</span>
+                  ) : medicine.isPrescriptionRequired === false ? (
+                    <span className="text-emerald-600">Không kê đơn (OTC)</span>
+                  ) : (
+                    <span className="text-blue-600">Không phải là thuốc</span>
+                  )}
+                </dd>
+              </div>
               <div className="flex justify-between gap-2 border-b border-slate-100 pb-2">
                 <dt className="text-slate-500">Phân nhóm:</dt>
                 <dd className="font-semibold text-slate-800 text-right">

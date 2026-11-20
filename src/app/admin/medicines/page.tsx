@@ -36,7 +36,7 @@ interface MedicineRecord {
   activeIngredient: string;
   manufacturer: string;
   registrationNumber: string | null;
-  isPrescriptionRequired: boolean;
+  isPrescriptionRequired: boolean | null;
   isFeatured: boolean;
   status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
   publishedAt: string | null;
@@ -134,7 +134,7 @@ export default function AdminMedicinesListPage() {
     activeIngredient: string;
     manufacturer: string;
     registrationNumber?: string;
-    isPrescriptionRequired: boolean;
+    isPrescriptionRequired: boolean | null | string;
     isFeatured: boolean;
     description?: string;
     usageInformation?: string;
@@ -245,7 +245,7 @@ export default function AdminMedicinesListPage() {
             setTimeout(() => {
               createForm.resetFields();
               createForm.setFieldsValue({
-                isPrescriptionRequired: false,
+                isPrescriptionRequired: 'OTC',
                 isFeatured: false,
               });
             }, 0);
@@ -403,13 +403,17 @@ export default function AdminMedicinesListPage() {
               width: 145,
               render: (_: unknown, record: MedicineRecord) => (
                 <Space direction="vertical" size={2}>
-                  {record.isPrescriptionRequired ? (
+                  {record.isPrescriptionRequired === true ? (
                     <Tag color="volcano" className="m-0">
                       Thuốc kê đơn (Rx)
                     </Tag>
-                  ) : (
+                  ) : record.isPrescriptionRequired === false ? (
                     <Tag color="green" className="m-0">
                       Không kê đơn (OTC)
+                    </Tag>
+                  ) : (
+                    <Tag color="blue" className="m-0">
+                      Không phải là thuốc
                     </Tag>
                   )}
                   {record.isFeatured && (
@@ -588,13 +592,20 @@ export default function AdminMedicinesListPage() {
             </Form.Item>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Form.Item
-              label="Thuốc kê đơn (Rx)"
+              label="Thuốc kê đơn (Rx) / Phân loại sản phẩm"
               name="isPrescriptionRequired"
-              valuePropName="checked"
+              rules={[{ required: true, message: 'Vui lòng chọn phân loại sản phẩm.' }]}
             >
-              <Switch checkedChildren="Thuốc kê đơn (Rx)" unCheckedChildren="Không kê đơn (OTC)" />
+              <Select
+                placeholder="Chọn phân loại"
+                options={[
+                  { label: 'Thuốc không kê đơn (OTC)', value: 'OTC' },
+                  { label: 'Thuốc kê đơn (Rx)', value: 'RX' },
+                  { label: 'Sản phẩm này không phải là thuốc', value: 'NON_DRUG' },
+                ]}
+              />
             </Form.Item>
 
             <Form.Item

@@ -97,7 +97,7 @@ interface MedicineDetailData {
   description: string | null;
   usageInformation: string | null;
   storageInformation: string | null;
-  isPrescriptionRequired: boolean;
+  isPrescriptionRequired: boolean | null;
   status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
   isFeatured: boolean;
   publishedAt: string | null;
@@ -177,7 +177,12 @@ export default function AdminMedicineEditorPage({
         activeIngredient: medicine.activeIngredient,
         manufacturer: medicine.manufacturer,
         registrationNumber: medicine.registrationNumber || '',
-        isPrescriptionRequired: medicine.isPrescriptionRequired,
+        isPrescriptionRequired:
+          medicine.isPrescriptionRequired === true
+            ? 'RX'
+            : medicine.isPrescriptionRequired === false
+              ? 'OTC'
+              : 'NON_DRUG',
         isFeatured: medicine.isFeatured,
         description: medicine.description || '',
         usageInformation: medicine.usageInformation || '',
@@ -732,13 +737,17 @@ export default function AdminMedicineEditorPage({
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <Form.Item
-                        label="Yêu cầu Kê đơn của Bác sĩ (Rx / OTC)"
+                        label="Thuốc kê đơn (Rx) / Phân loại sản phẩm"
                         name="isPrescriptionRequired"
-                        valuePropName="checked"
+                        rules={[{ required: true, message: 'Vui lòng chọn phân loại sản phẩm.' }]}
                       >
-                        <Switch
-                          checkedChildren="Thuốc kê đơn (Rx)"
-                          unCheckedChildren="Không kê đơn (OTC)"
+                        <Select
+                          placeholder="Chọn phân loại"
+                          options={[
+                            { label: 'Thuốc không kê đơn (OTC)', value: 'OTC' },
+                            { label: 'Thuốc kê đơn (Rx)', value: 'RX' },
+                            { label: 'Sản phẩm này không phải là thuốc', value: 'NON_DRUG' },
+                          ]}
                         />
                       </Form.Item>
 

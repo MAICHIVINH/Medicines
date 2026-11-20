@@ -5,6 +5,13 @@ import { neonStorageService } from '@/infrastructure/storage/neon-storage.servic
 import { AppError, ConflictError, NotFoundError } from '@/lib/errors';
 import { removeVietnameseTones, slugify } from '@/lib/utils';
 
+export const prescriptionRequiredSchema = z.preprocess((val) => {
+  if (val === 'RX' || val === 'true' || val === true) return true;
+  if (val === 'OTC' || val === 'false' || val === false) return false;
+  if (val === 'NON_DRUG' || val === 'null' || val === null || val === 'none') return null;
+  return val;
+}, z.boolean().nullable().optional());
+
 export const createMedicineSchema = z.object({
   categoryId: z.string().uuid('Danh mục thuốc không hợp lệ.'),
   name: z
@@ -36,12 +43,13 @@ export const createMedicineSchema = z.object({
   description: z.string().trim().max(20000).nullable().optional(),
   usageInformation: z.string().trim().max(20000).nullable().optional(),
   storageInformation: z.string().trim().max(10000).nullable().optional(),
-  isPrescriptionRequired: z.boolean().default(false),
+  isPrescriptionRequired: prescriptionRequiredSchema.default(false),
   status: z.nativeEnum(MedicineStatus).default(MedicineStatus.DRAFT),
   isFeatured: z.boolean().default(false),
 });
 
 export const updateMedicineSchema = createMedicineSchema.partial().extend({
+  isPrescriptionRequired: prescriptionRequiredSchema,
   restore: z.boolean().optional(),
 });
 
@@ -58,7 +66,7 @@ export interface MedicineListQuery {
   categorySlug?: string;
   minPrice?: number;
   maxPrice?: number;
-  isPrescriptionRequired?: boolean;
+  isPrescriptionRequired?: boolean | null;
   isFeatured?: boolean;
   status?: MedicineStatus;
   includeUnpublished?: boolean;

@@ -55,11 +55,13 @@ export default async function MedicinesCatalogPage({ searchParams }: PageProps) 
           ? Number(params.maxPrice)
           : undefined;
       const isPrescriptionRequired =
-        params.isPrescriptionRequired === 'true'
+        params.isPrescriptionRequired === 'true' || params.isPrescriptionRequired === 'RX'
           ? true
-          : params.isPrescriptionRequired === 'false'
+          : params.isPrescriptionRequired === 'false' || params.isPrescriptionRequired === 'OTC'
             ? false
-            : undefined;
+            : params.isPrescriptionRequired === 'null' || params.isPrescriptionRequired === 'none' || params.isPrescriptionRequired === 'NON_DRUG'
+              ? null
+              : undefined;
       const isFeatured =
         params.isFeatured === 'true'
           ? true

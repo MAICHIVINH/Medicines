@@ -14,7 +14,7 @@ export interface MedicineCardItem {
   activeIngredient: string;
   manufacturer: string;
   registrationNumber?: string | null;
-  isPrescriptionRequired: boolean;
+  isPrescriptionRequired?: boolean | null;
   isFeatured?: boolean;
   primaryImageUrl?: string | null;
   referencePrice?: number | null;
@@ -59,13 +59,17 @@ export function MedicineCard({ medicine }: { medicine: MedicineCardItem }) {
 
         {/* Prescription Status Badge */}
         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-          {medicine.isPrescriptionRequired ? (
+          {medicine.isPrescriptionRequired === true ? (
             <span className="inline-flex items-center rounded-md bg-rose-600/95 px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm">
               Thuốc kê đơn (Rx)
             </span>
-          ) : (
+          ) : medicine.isPrescriptionRequired === false ? (
             <span className="inline-flex items-center rounded-md bg-emerald-600/95 px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm">
               Không kê đơn (OTC)
+            </span>
+          ) : (
+            <span className="inline-flex items-center rounded-md bg-blue-600/95 px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm">
+              Sản phẩm không phải thuốc
             </span>
           )}
         </div>

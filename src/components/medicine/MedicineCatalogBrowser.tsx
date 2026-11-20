@@ -89,7 +89,12 @@ export function MedicineCatalogBrowser({
   const activeFilterCount = useMemo(() => {
     let count = 0;
     if (categorySlug) count++;
-    if (prescriptionFilter === 'true' || prescriptionFilter === 'false') count++;
+    if (
+      prescriptionFilter === 'true' ||
+      prescriptionFilter === 'false' ||
+      prescriptionFilter === 'null'
+    )
+      count++;
     if (minPrice.trim() !== '' || maxPrice.trim() !== '') count++;
     for (const val of Object.values(attrValues)) {
       if (val && val.trim()) count++;
@@ -113,7 +118,11 @@ export function MedicineCatalogBrowser({
         if (categorySlug) {
           params.set('categorySlug', categorySlug);
         }
-        if (prescriptionFilter === 'true' || prescriptionFilter === 'false') {
+        if (
+          prescriptionFilter === 'true' ||
+          prescriptionFilter === 'false' ||
+          prescriptionFilter === 'null'
+        ) {
           params.set('isPrescriptionRequired', prescriptionFilter);
         }
         if (minPrice.trim() !== '') {
@@ -231,9 +240,10 @@ export function MedicineCatalogBrowser({
           value={prescriptionFilter}
           onChange={(val) => setPrescriptionFilter(val)}
           options={[
-            { label: 'Tất cả (Rx & OTC)', value: '' },
+            { label: 'Tất cả phân loại', value: '' },
             { label: 'Thuốc không kê đơn (OTC)', value: 'false' },
             { label: 'Thuốc kê đơn (Rx)', value: 'true' },
+            { label: 'Sản phẩm này không phải là thuốc', value: 'null' },
           ]}
         />
       </div>

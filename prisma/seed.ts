@@ -7,32 +7,48 @@ async function main() {
   console.log('🚀 Bắt đầu khởi tạo dữ liệu gốc (Seeding Database)...');
 
   // ---------------------------------------------------------------------------
-  // 1. TÀI KHOẢN ADMIN DUY NHẤT (4.8. AdminAccounts)
+  // 1. TÀI KHOẢN ADMIN QUẢN TRỊ (4.8. AdminAccounts)
   // ---------------------------------------------------------------------------
-  const adminUsername = process.env.INITIAL_ADMIN_USERNAME || 'admin';
-  const adminEmail = process.env.INITIAL_ADMIN_EMAIL || 'admin@pharmacatalog.vn';
-  const adminPassword = process.env.INITIAL_ADMIN_PASSWORD || 'Vinh260904@';
-  const adminFullName = process.env.INITIAL_ADMIN_FULLNAME || 'Quản trị viên Hệ thống Dược điển';
+  const adminList = [
+    {
+      username: process.env.INITIAL_ADMIN_USERNAME,
+      email: process.env.INITIAL_ADMIN_EMAIL,
+      password: process.env.INITIAL_ADMIN_PASSWORD,
+      fullName: process.env.INITIAL_ADMIN_FULLNAME,
+    },
+    // Bạn có thể khai báo thêm các tài khoản admin khác tại đây nếu muốn nạp qua seed:
+    // {
+    //   username: 'admin2',
+    //   email: 'admin2@hospital.local',
+    //   password: 'AdminPassword@123',
+    //   fullName: 'Quản trị viên 2',
+    // },
+  ];
 
-  const passwordHash = await bcrypt.hash(adminPassword, 12);
-
-  const existingAdminCount = await prisma.adminAccount.count();
   let adminAccount;
-
-  if (existingAdminCount === 0) {
-    adminAccount = await prisma.adminAccount.create({
-      data: {
-        username: adminUsername,
-        email: adminEmail,
+  for (const item of adminList) {
+    const passwordHash = await bcrypt.hash(item.password, 12);
+    const upserted = await prisma.adminAccount.upsert({
+      where: { username: item.username },
+      update: {
+        email: item.email,
+        fullName: item.fullName,
+        isActive: true,
+      },
+      create: {
+        username: item.username,
+        email: item.email,
         passwordHash,
-        fullName: adminFullName,
+        fullName: item.fullName,
         isActive: true,
       },
     });
-    console.log(`✅ Đã khởi tạo tài khoản Admin duy nhất: ${adminAccount.username} (${adminAccount.email})`);
-  } else {
-    adminAccount = await prisma.adminAccount.findFirstOrThrow();
-    console.log(`ℹ️ Tài khoản Admin đã tồn tại (${adminAccount.username}), giữ nguyên cấu hình.`);
+    if (!adminAccount) adminAccount = upserted;
+    console.log(`✅ Đã nạp tài khoản Admin: ${upserted.username} (${upserted.email})`);
+  }
+
+  if (!adminAccount) {
+    throw new Error('Không thể khởi tạo hoặc tìm thấy tài khoản Admin.');
   }
 
   // ---------------------------------------------------------------------------
@@ -491,15 +507,15 @@ async function main() {
       activeIngredient: 'Vitamin nhóm B, Vitamin C 500mg, Canxi, Magie, Kẽm',
       manufacturer: 'PT Bayer Indonesia',
       registrationNumber: 'VN-22104-19',
-      isPrescriptionRequired: false,
+      isPrescriptionRequired: null, // Sản phẩm này không phải là thuốc (Thực phẩm bảo vệ sức khỏe)
       isFeatured: true,
       status: MedicineStatus.PUBLISHED,
       description:
-        'Viên sủi bổ sung Vitamin nhóm B kết hợp Vitamin C, Canxi, Magie và Kẽm chính hãng Bayer.',
+        'Viên sủi bổ sung Vitamin nhóm B kết hợp Vitamin C, Canxi, Magie và Kẽm chính hãng Bayer. Sản phẩm bổ sung vi chất cho cơ thể.',
       usageInformation:
-        'Hòa tan 1 viên sủi trong 200ml nước uống mỗi ngày theo hướng dẫn của nhà sản xuất.',
+        'Hòa tan 1 viên sủi trong 200ml nước uống mỗi ngày theo hướng dẫn của nhà sản xuất. Lưu ý: Sản phẩm này không phải là thuốc và không có tác dụng thay thế thuốc chữa bệnh.',
       storageInformation:
-        'Đậy nắp tuýp kín sau khi sử dụng, bảo quản dưới 25°C.',
+        'Đậy nắp tuýp kín sau khi sử dụng, bảo quản dưới 25°C, nơi khô ráo.',
       variants: [
         {
           sku: 'BAY-BER-T10',
@@ -511,6 +527,35 @@ async function main() {
             { code: 'strength', textValue: '500mg Vitamin C' },
             { code: 'flavor', optionValue: 'huong-cam' },
             { code: 'sugar_free', booleanValue: true },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'Men vi sinh BioGaia Protectis Drops',
+      slug: 'men-vi-sinh-biogaia-protectis-drops',
+      categorySlug: 'men-vi-sinh-bu-nuoc-dien-giai',
+      activeIngredient: 'Lactobacillus reuteri DSM 17938',
+      manufacturer: 'BioGaia AB (Thụy Điển)',
+      registrationNumber: '32562/2016/ATTP-XNCB',
+      isPrescriptionRequired: null, // Sản phẩm này không phải là thuốc
+      isFeatured: true,
+      status: MedicineStatus.PUBLISHED,
+      description:
+        'Men vi sinh BioGaia Protectis dạng dung dịch giọt chứa lợi khuẩn thuần khiết Lactobacillus reuteri Protectis được phân lập từ sữa mẹ, sản xuất bởi BioGaia Thụy Điển.',
+      usageInformation:
+        'Uống 5 giọt mỗi ngày theo khuyến nghị của nhà sản xuất. Lắc đều lọ trước khi sử dụng. Lưu ý: Sản phẩm này không phải là thuốc và không có tác dụng thay thế thuốc chữa bệnh.',
+      storageInformation:
+        'Bảo quản nơi khô mát, nhiệt độ từ 5°C đến 25°C, tránh ánh nắng trực tiếp.',
+      variants: [
+        {
+          sku: 'BGA-PRO-L05',
+          name: 'BioGaia Protectis Drops - Chai 5ml',
+          price: 415000,
+          attributes: [
+            { code: 'dosage_form', optionValue: 'dung-dich-uong' },
+            { code: 'packaging', optionValue: 'chai-60ml' },
+            { code: 'strength', textValue: '100 triệu lợi khuẩn/5 giọt' },
           ],
         },
       ],

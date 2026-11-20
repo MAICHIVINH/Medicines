@@ -41,11 +41,13 @@ export async function GET(req: NextRequest) {
 
     const isPrescriptionRaw = searchParams.get('isPrescriptionRequired');
     const isPrescriptionRequired =
-      isPrescriptionRaw === 'true'
+      isPrescriptionRaw === 'true' || isPrescriptionRaw === 'RX'
         ? true
-        : isPrescriptionRaw === 'false'
+        : isPrescriptionRaw === 'false' || isPrescriptionRaw === 'OTC'
           ? false
-          : undefined;
+          : isPrescriptionRaw === 'null' || isPrescriptionRaw === 'none' || isPrescriptionRaw === 'NON_DRUG'
+            ? null
+            : undefined;
 
     const isFeaturedRaw = searchParams.get('isFeatured');
     const isFeatured =

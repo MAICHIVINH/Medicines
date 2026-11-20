@@ -186,32 +186,48 @@ export function PublicHeader({ categories = [] }: { categories?: NavCategoryItem
             </button>
           </form>
 
-          <div className="flex flex-col space-y-2 text-sm font-medium text-slate-700">
+          <div className="flex flex-col space-y-2 text-sm font-medium">
             <Link
               href="/"
               onClick={() => setMobileMenuOpen(false)}
-              className="rounded-lg px-3 py-2 hover:bg-slate-100"
+              className={`rounded-lg px-3 py-2 transition-colors ${
+                pathname === '/'
+                  ? 'text-pharma-700 bg-pharma-50 font-semibold'
+                  : 'text-slate-700 hover:bg-slate-100'
+              }`}
             >
               Trang chủ
             </Link>
             <Link
               href="/medicines"
               onClick={() => setMobileMenuOpen(false)}
-              className="rounded-lg px-3 py-2 hover:bg-slate-100"
+              className={`rounded-lg px-3 py-2 transition-colors ${
+                pathname.startsWith('/medicines')
+                  ? 'text-pharma-700 bg-pharma-50 font-semibold'
+                  : 'text-slate-700 hover:bg-slate-100'
+              }`}
             >
               Tra cứu danh sách thuốc
             </Link>
             <Link
               href="/categories"
               onClick={() => setMobileMenuOpen(false)}
-              className="rounded-lg px-3 py-2 hover:bg-slate-100"
+              className={`rounded-lg px-3 py-2 transition-colors ${
+                pathname.startsWith('/categories')
+                  ? 'text-pharma-700 bg-pharma-50 font-semibold'
+                  : 'text-slate-700 hover:bg-slate-100'
+              }`}
             >
               Danh mục dược phẩm
             </Link>
             <Link
               href="/admin"
               onClick={() => setMobileMenuOpen(false)}
-              className="rounded-lg px-3 py-2 text-pharma-700 bg-pharma-50"
+              className={`rounded-lg px-3 py-2 transition-colors ${
+                pathname.startsWith('/admin')
+                  ? 'text-pharma-700 bg-pharma-50 font-semibold'
+                  : 'text-slate-700 hover:bg-slate-100'
+              }`}
             >
               Khu vực quản trị (Admin)
             </Link>
